@@ -1,0 +1,53 @@
+
+
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: 127.0.0.1:9092        # Kafka broker address
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all                                 # Acknowledgment setting: 'all' ensures the highest reliability
+      retries: 10                               # Number of retry attempts if message sending fails
+      batch-size: 16384                         # Size of the batch sent to Kafka (in bytes)
+      buffer-memory: 33554432                   # Total memory (in bytes) available to the producer for buffering
+      compression-type: gzip                    # Type of compression for the message (optional)
+      linger-ms: 1                              # Time to wait before sending a batch (in milliseconds)
+      max-request-size: 1048576                 # Maximum size of a request (in bytes)
+      max-block-ms: 60000                       # Maximum time (in milliseconds) the producer will block while waiting for a buffer
+      properties:
+        #security.protocol: SSL                  # Protocol used to communicate with brokers
+        #ssl.keystore.location: C:\\softwares\\kafka\\ssl2\\kafka.server.keystore.jks    # Path to the keystore file
+        #ssl.keystore.password: 123456           # Keystore password
+        #ssl.key.password: 123456                # Key password (if different from keystore password)
+        #ssl.truststore.location: C:\\softwares\\kafka\\ssl2\\kafka.server.truststore.jks # Path to the truststore file
+        #ssl.truststore.password: 123456         # Truststore password
+        #ssl.client.auth: required               # Client authentication required
+        retries: 1                              # Retry setting for producer (number of attempts)
+        enable.idempotence: true                # Ensure that the producer sends each record exactly once
+        delivery.timeout.ms: 120000             # Total time to wait for message delivery (in milliseconds)
+
+    # Optional: Define custom properties for producer
+    properties:
+      request.timeout.ms: 30000                 # Timeout for request sent by producer (in milliseconds)
+      metadata.max.age.ms: 300000               # How long to wait before refreshing metadata (in milliseconds)
+server:
+  port: 8081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  #  enabled: true
+  #zipkin:
+  #  tracing:
+  #    endpoint: http://localhost:9411/api/v2/spans
+
+
+  #cloud:
+  #  compatibility-verifier:
+  #    enabled: false
